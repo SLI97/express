@@ -12,6 +12,15 @@ exports.articleList = (pageSize, pageNow) => {
 	})
 }
 
+exports.getById = (id) => {
+	return new Promise((resolve, reject) => {
+		Article.find({id}).limit(1).all((err, result) => {
+			if (err) reject("没找到")
+			resolve(result[0])
+		});
+	})
+}
+
 exports.articleCount = () => {
 	return new Promise((resolve, reject) => {
 		Article.count((err, result) => {
@@ -21,13 +30,13 @@ exports.articleCount = () => {
 	})
 }
 
-exports.addarticle = ({title, tagid, brief, content}) => {
+exports.add = ({title, tagid, brief, content}) => {
 	return new Promise((resolve, reject) => {
 		const article = {
 			title,
 			brief,
 			content,
-			tag_id:tagid,
+			tag_id: tagid,
 			pubtime: moment().format('YYYY-MM-DD HH:mm:ss'),
 			date: moment().format('YYYY年MM月'),
 		}
@@ -38,20 +47,25 @@ exports.addarticle = ({title, tagid, brief, content}) => {
 	})
 }
 
-
-exports.deletearticle = ({title, tagid, brief, content}) => {
+exports.update = ({id, content, title, brief, tagid}) => {
 	return new Promise((resolve, reject) => {
-		const article = {
-			title,
-			brief,
-			content,
-			tag_id:tagid,
-			pubtime: moment().format('YYYY-MM-DD HH:mm:ss'),
-			date: moment().format('YYYY年MM月'),
-		}
-		Article.create(article, (err, result) => {
+		Article.find({id}).each((item)=> {
+			item.content = content;
+			item.title = title;
+			item.brief = brief;
+			item.tag_id = tagid;
+		}).save( (err) =>{
+			if (err) reject("修改失败!")
+			resolve("修改成功!")
+		});
+	})
+}
+
+exports.deleteById = (id) => {
+	return new Promise((resolve, reject) => {
+		Article.find({id}).remove((err) => {
 			if (err) reject("没找到")
-			resolve(result)
-		})
+			resolve("删除成功!")
+		});
 	})
 }

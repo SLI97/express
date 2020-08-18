@@ -29,7 +29,7 @@
             <td><%=articleList[i].bad%></td>
             <td>
                 <a class="btn btn-primary view" data-id="<%=articleList[i].id%>">预览</a>
-                <a href="/article/updateArticle?id=<%=articleList[i].id%>" class="btn btn-primary" data-id="<%=articleList[i].id%>">修改</a>
+                <a href="/article/update/<%=articleList[i].id%>" class="btn btn-primary" data-id="<%=articleList[i].id%>">修改</a>
                 <a class="btn btn btn-danger delete" data-id="<%=articleList[i].id%>">删除</a>
             </td>
         </tr>
@@ -94,6 +94,33 @@
                     "json"
             );
         });
+
+	    //删除
+	    $(".delete").click(function () {
+		    const id = $(this).data('id');
+		    layer.confirm('确定删除吗？', {
+			    btn: ['确定', '取消'] //按钮
+		    }, function (ss) {
+			    $.post(
+				    '/article/delete',
+				    {
+					    id: id,
+				    },
+				    function (data) {
+					    if (data.status) {
+						    layer.msg(data.msg, {
+							    time: 500 //20s后自动关闭
+						    }, function () {
+							    window.location.reload()
+						    });
+					    } else {
+						    layer.msg(data.msg);
+					    }
+				    },
+				    "json"
+			    );
+		    });
+	    });
     });
 </script>
 

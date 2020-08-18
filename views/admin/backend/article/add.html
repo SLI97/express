@@ -5,16 +5,14 @@
 		<div class="form-group ">
 			<label class="col-sm-1 control-label">文章标题</label>
 			<div class="col-sm-11">
-				<input type="hidden" id="id" value="<%=article.id%>">
 				<input type="text" class="form-control" id="title"
-							 placeholder="请输入名字" value="<%=article.title%>" required>
+							 placeholder="请输入名字" required>
 			</div>
 		</div>
 		<div class="form-group ">
 			<label class="col-sm-1 control-label">文章简介</label>
 			<div class="col-sm-11">
-				<textarea rows="5" cols="20" id="brief" class="form-control" placeholder="请输入文章简介"
-									required><%=article.brief%></textarea>
+				<textarea rows="5" cols="20" id="brief" class="form-control" placeholder="请输入文章简介" required></textarea>
 			</div>
 		</div>
 		<div class="form-group ">
@@ -23,11 +21,7 @@
 				<select class="form-control" id="tagid">
 					<option value="">请选择标签分类</option>
 					<% for (var i=0;i< tagList.length;i++) { %>
-					
-					<option value="<%=tagList[i].id%>"
-					<% if (article.tag && article.tag.id == tagList[i].id) { %> selected <% } %> >
-					<%=tagList[i].tagname%> </option>
-					
+					<option value="<%=tagList[i].id%>"><%=tagList[i].tagname%></option>
 					<% } %>
 				</select>
 			
@@ -44,9 +38,7 @@
 					<button id="ar-show-html" type="button" class="btn btn-info"><strong>预览</strong>&nbsp;<i
 						class="glyphicon glyphicon-eye-open"></i></button>
 				</div>
-				<div id="ar-editor" class="col-sm-12 col-xs-12 ar-editor-zone" contentEditable>
-					<%=article.content%>
-				</div>
+				<div id="ar-editor" class="col-sm-12 col-xs-12 ar-editor-zone" contentEditable></div>
 				
 				<div class="col-sm-12 col-xs-12 ar-editor-zone">
 					<article id="ar-preview" class="markdown-body"></article>
@@ -65,42 +57,43 @@
 </div>
 
 <% include ../../footer.html  %>
-
 <script type="text/javascript">
 
 	$(document).ready(function () {
 
 		var editor = ace.edit("ar-editor");
 
+
 		$("#download-content").click(function () {
 			//alert(editor.getValue());
-			var id = $("#id").val();
 			var title = $("#title").val();
 			var brief = $("#brief").val();
 			var tagid = $("#tagid").val();
 			$.ajax({
-				url: '/article/update/done',
+				url: '/article/add/done',
 				type: "post",
 				dataType: "json",
 				data: {
-					id: id,
 					content: editor.getValue(),
 					title: title,
 					brief: brief,
 					tagid: tagid
 				},
-				success:
-					function (data) {
-						layer.msg(data.msg, {
-							time: 500 //20s后自动关闭
-						}, function () {
-							// window.location.href = window.location.protocol + "//"+ window.location.protocol + "/article/list"
-							window.location.href = window.location.origin + "/article/list"
-						});
-					},
+				success: function (data) {
+
+					layer.msg(data.msg, {
+
+						time: 500 //20s后自动关闭
+
+					}, function () {
+						window.location.href = window.location.origin + "/article/list"
+					});
+				},
 				error: function (error) {
+
 					layer.msg(data.msg);
 				}
+
 			});
 		});
 	});

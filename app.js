@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const express = require("express")
 const favicon = require('serve-favicon');
+const index = require("./controller/index")
 const article = require("./controller/article")
 const tag = require("./controller/tag")
 
@@ -31,6 +32,7 @@ app.use(cookieParser());
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 //业务逻辑路由中间件
+app.use("/", index)
 app.use("/article", article)
 app.use("/tag", tag)
 
