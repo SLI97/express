@@ -8,6 +8,7 @@ const favicon = require('serve-favicon');
 const index = require("./controller/index")
 const article = require("./controller/article")
 const tag = require("./controller/tag")
+// const request = require("request")
 
 //生成服务
 const app = express()
@@ -36,6 +37,18 @@ app.use("/", index)
 app.use("/article", article)
 app.use("/tag", tag)
 
+// app.get("/haha1", (req, res) => {
+//     var url = 'http://localhost:3002/haha'
+//     request(url, (error, response, body) => {
+//         if (!error && response.statusCode === 200) {
+//             var data = JSON.parse(body);
+//             res.send(data);
+//         } else {
+//             res.send('{error:404}');
+//         }
+//     });
+// })
+
 //兜底404
 // app.use(function (req, res, next) {
 //     console.log("NOT FOUND404")
@@ -43,7 +56,7 @@ app.use("/tag", tag)
 // });
 
 //抛出异常才会来到这
-app.use((err, req, res, next) =>{
+app.use((err, req, res, next) => {
     res.locals.error = err;
     res.status(500)
     res.render("error")
